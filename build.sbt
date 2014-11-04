@@ -9,11 +9,11 @@ scalaVersion := "2.11.2"
 
 libraryDependencies ++= Seq(
   "com.github.benhutchison" %% "mg-domain" % "0.1",
-  "com.github.benhutchison" %% "prickle" % "1.0.3",
+  "com.github.benhutchison" %% "prickle" % "1.1.0",
   "com.lihaoyi" %% "autowire" % "0.2.3",
   "net.databinder" %% "unfiltered" % "0.8.2",
-  "net.databinder" %% "unfiltered-filter" % "0.8.2",
-  "net.databinder" %% "unfiltered-jetty" % "0.8.2"
+  "net.databinder" %% "unfiltered-filter-async" % "0.8.2",
+  "net.databinder" %% "unfiltered-jetty" % "0.8.3-SNAPSHOT"
 )
 
 //scalacOptions ++= Seq("-Ymacro-debug-lite")
