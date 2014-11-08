@@ -155,6 +155,10 @@ object Games extends Api {
     gamesAndObservers = gamesAndObservers.updated(game.id, (game, Buffer.empty[Promise[Game]]))
     game
   }
+
+  def concede(game: Game, playerId: Int): Game = {
+    notifyObservers(game.concede(playerId))
+  }
 }
 
 object MyServer extends autowire.Server[String, Unpickler, Pickler]{
