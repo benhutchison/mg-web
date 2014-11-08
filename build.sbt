@@ -16,6 +16,8 @@ libraryDependencies ++= Seq(
   "net.databinder" %% "unfiltered-jetty" % "0.8.3-SNAPSHOT"
 )
 
+resolvers += "oss snapshots" at "http://oss.sonatype.org/content/repositories/snapshots"
+
 //scalacOptions ++= Seq("-Ymacro-debug-lite")
 
 
