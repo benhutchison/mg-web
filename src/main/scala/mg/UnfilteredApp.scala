@@ -10,6 +10,7 @@ import unfiltered.jetty.ContextAdder
 import unfiltered.request._
 import unfiltered.response._
 
+import scala.collection.mutable.Buffer
 import scala.concurrent.{ExecutionContext, Await, Future, Promise}
 import scala.util.{Random, Failure, Success}
 
@@ -25,6 +26,10 @@ object UnfilteredApp {
       case req@ControllerApi(method, json) => {
         val r = Await.result(invokeController(method, json), 240 seconds)
         ResponseString(r)
+      }
+      case POST(Path("/reset")) => {
+        Games.reset()
+        ResponseString("Server state reset")
       }
       case req@Path(x) => {
         println(s"Unrecognized: method=${req.method} path=$x")
@@ -67,6 +72,12 @@ object UnfilteredApp {
 
 object Games extends Api {
 
+  def reset(): Unit = {
+    gamesAndObservers = Map.empty
+    waitingPlayer = None
+  }
+
+
   import UnfilteredApp.ec
 
   import collection.mutable.Buffer
@@ -79,7 +90,7 @@ object Games extends Api {
     val s = seq; seq = seq + 1; s
   }
 
-  var gamesAndObservers = Map.empty[Int, (Game, Buffer[Promise[Game]])]
+  var gamesAndObservers: Map[Int, (Game, Buffer[Promise[Game]])] = Map.empty
 
   def games = gamesAndObservers.values.map(_._1)
 
