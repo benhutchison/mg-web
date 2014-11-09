@@ -24,7 +24,7 @@ object UnfilteredApp {
   def main(args: Array[String]) {
     val api = unfiltered.filter.Planify {
       case req@ControllerApi(method, json) => {
-        val r = Await.result(invokeController(method, json), 240 seconds)
+        val r = Await.result(invokeController(method, json), 600 seconds)
         ResponseString(r)
       }
       case POST(Path("/reset")) => {
@@ -99,7 +99,7 @@ object Games extends Api {
   def join(player1: String): Future[Game] = {
     synchronized {
       waitingPlayer match {
-        case Some((player2, promise)) => {
+        case Some((player2, promise)) if player1 != player2 => {
           println(s"player $player2 waiting, signalling OK, player $player1 joined. Game ready.")
           waitingPlayer = None
           val g = newGame(player1, player2)
@@ -107,7 +107,7 @@ object Games extends Api {
           promise.success(g)
           Future(g)
         }
-        case None => {
+        case _ => {
           val p = Promise[Game]
           waitingPlayer = Some(player1, p)
           println(s"player $player1 queued up for next game")
